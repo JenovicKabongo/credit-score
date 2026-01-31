@@ -1,17 +1,18 @@
-import mariadb
+import mysql.connector
+
 import sys
 
 def get_connection():
     """Crée et retourne une connexion à la base de données."""
     try:
-        conn = mariadb.connect(
+        conn = mysql.connector.connect(
             host="localhost",
             port=3306,
-            user="picapic",
-            password="1234",
+            user="root",
+            password="Root1234",
             database="credits"
         )
         return conn
-    except mariadb.Error as e:
+    except mysql.connector.Error as e:
         print(f"Erreur lors de la connexion : {e}")
         sys.exit(1)

@@ -11,7 +11,10 @@ def calcul_score(numero, montant):
         return decision, limite
 
     df = pandas.read_csv('dataset_clean2.csv')
-    user_data = df[df['phone_number'] == numero]
+    user_data = df[df['phone_number'] == int(numero)]
+    print(user_data, flush=True)
+    print(type(numero), flush=True)
+    print(numero, flush=True)
 
     if len(user_data) == 0:
         return decision, limite

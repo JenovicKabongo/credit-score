@@ -8,7 +8,7 @@ def validation(numero):
     requete = """
         SELECT COUNT(*) 
         FROM transactions 
-        WHERE numero = ? 
+        WHERE numero = %s 
         AND date >= DATE_SUB(NOW(), INTERVAL 1 YEAR)
     """
 

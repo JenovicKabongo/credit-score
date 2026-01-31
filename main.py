@@ -132,7 +132,7 @@ async def handle_ussd(ussd_request: UssdRequest):
             elif user_data == "1":
                 if validation(user_numero):
                     try:
-                        query = "SELECT montant FROM transactions WHERE numero = ? ORDER BY date DESC LIMIT 1"
+                        query = "SELECT montant FROM transactions WHERE numero = %s ORDER BY date DESC LIMIT 1"
                         cur.execute(query, ( user_numero,))
         
                         resultat = cur.fetchone()[0]
@@ -202,7 +202,7 @@ async def handle_ussd(ussd_request: UssdRequest):
                 if decision:
                     try:
                         cur.execute(
-                        "INSERT INTO transactions (numero, montant, date) VALUES (?, ?, ?)", 
+                        "INSERT INTO transactions (numero, montant, date) VALUES (%s, %s, %s)", 
                         (user_numero, montant_final, str(datetime.now()))
                         )
                         conn.commit()
@@ -212,6 +212,9 @@ async def handle_ussd(ussd_request: UssdRequest):
                         cur.close()
                         conn.close()
                     response.message = f"Succès ! L'emprunt de {montant_final} FC a été transféré sur votre compte."
+                    response.continueSession = False # Termine la session USSD
+                elif validation(user_numero):
+                    response.message = f"Votre demande d'emprunt a été refusée. Vous avez déjà un emprunt en cours."
                     response.continueSession = False # Termine la session USSD
                 else:
                     response.message = f"Vous n'êtes pas éligible à cet emprunt. Votre limite actuel est de {limite} FC."
